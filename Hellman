@@ -1,0 +1,47 @@
+HTML-- 
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Diffie-Hellman Key Exchange</title> 
+</head> 
+<body> 
+<h2>Diffie-Hellman Key Exchange</h2> 
+<p>Public parameters (p, g) are (23, 5)</p> 
+<p>Enter your private key (a): <input type="text" id="privateKey"></p> 
+<button onclick="calculatePublicKey()">Calculate Public Key</button> 
+<p>Bob's public key (b): <span id="b"></span></p> 
+<p>Enter Bob's public key (b): <input type="text" id="bobPublicKey"></p> 
+<button onclick="calculateSharedSecret()">Calculate Shared Secret</button> 
+<p>Shared secret: <span id="sharedSecret"></span></p> 
+<script src="diffie-hellman.js"></script> 
+</body> 
+</html> 
+JavaScript-- 
+// Public parameters 
+const p = 23; 
+const g = 5; 
+function calculatePublicKey() { 
+const privateKey = parseInt(document.getElementById("privateKey").value); 
+const publicKey = modPow(g, privateKey, p); 
+document.getElementById("b").innerText = publicKey; 
+} 
+function calculateSharedSecret() { 
+const privateKey = parseInt(document.getElementById("privateKey").value); 
+const bobPublicKey = parseInt(document.getElementById("bobPublicKey").value); 
+const sharedSecret = modPow(bobPublicKey, privateKey, p); 
+document.getElementById("sharedSecret").innerText = sharedSecret; 
+} 
+function modPow(base, exp, mod) { 
+let result = 1; 
+base = base % mod; 
+while (exp > 0) { 
+if (exp % 2 === 1) { 
+result = (result * base) % mod; 
+} 
+exp = Math.floor(exp / 2); 
+base = (base * base) % mod; 
+} 
+return result; 
+}
